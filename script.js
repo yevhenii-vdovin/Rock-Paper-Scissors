@@ -1,5 +1,12 @@
 let pScore = 0;
 let cScore = 0;
+const options = document.querySelector('.options');
+const playerHand = document.querySelector('.player-hand');
+const computerHand = document.querySelector('.computer-hand');
+
+options.addEventListener('click', eventHandler);
+
+startGame();
 
 //start
 
@@ -9,38 +16,34 @@ function startGame() {
   const match = document.querySelector('.match');
 
   playBtn.addEventListener('click', () => {
-    introScreen.classList.add('fadeOut');
-    match.classList.add('fadeIn');
+    introScreen.classList.add('close');
+    match.classList.add('open');
   });
 }
 
-//play
-
-function play() {
-  const options = document.querySelectorAll('.options button');
-  const playerHand = document.querySelector('.player-hand');
-  const computerHand = document.querySelector('.computer-hand');
-
-  //random computer
+function computerChoice() {
   const computerOptions = ['rock', 'paper', 'scissors'];
+  const computerNumber = Math.floor(Math.random() * 3);
+  return computerOptions[computerNumber];
+}
 
-  options.forEach((test) => {
-    test.addEventListener('click', function () {
-      const playerChoise = this.innerHTML;
-      console.log(playerChoise);
-      // computer choise
-      const computerNumber = Math.floor(Math.random() * 3);
-      console.log(computerNumber);
-      const computerChoise = computerOptions[computerNumber];
-      console.log(computerChoise);
+// eventHandler
 
-      compareHands(playerChoise, computerChoise);
-
-      //update images
-      playerHand.src = `./img/${playerChoise}.png`;
-      computerHand.src = `./img/${computerChoise}.png `;
-    });
-  });
+function eventHandler(event) {
+  const target = event.target;
+  if (target.classList.contains('rock')) {
+    compareHands(target.textContent, computerChoice());
+  }
+  if (target.classList.contains('paper')) {
+    compareHands(target.textContent, computerChoice());
+  }
+  if (target.classList.contains('scissors')) {
+    compareHands(target.textContent, computerChoice());
+  }
+  if (target.classList.contains('btn')) {
+    playerHand.src = `./img/${target.textContent}.png`;
+    computerHand.src = `./img/${computerChoice()}.png `;
+  }
 }
 
 function updateScore() {
@@ -62,15 +65,9 @@ function compareHands(playerChoise, computerChoise) {
 
   if (playerChoise === 'rock') {
     if (computerChoise === 'scissors') {
-      winner.innerHTML = 'Player win';
-      pScore++;
-      updateScore();
-      return;
+      playerWin();
     } else {
-      winner.innerHTML = 'Computer wins';
-      cScore++;
-      updateScore();
-      return;
+      computerWin();
     }
   }
 
@@ -78,15 +75,9 @@ function compareHands(playerChoise, computerChoise) {
 
   if (playerChoise === 'paper') {
     if (computerChoise === 'scissors') {
-      winner.innerHTML = 'Computer win';
-      cScore++;
-      updateScore();
-      return;
+      computerWin();
     } else {
-      winner.innerHTML = 'Player wins';
-      pScore++;
-      updateScore();
-      return;
+      playerWin();
     }
   }
 
@@ -94,18 +85,48 @@ function compareHands(playerChoise, computerChoise) {
 
   if (playerChoise === 'scissors') {
     if (computerChoise === 'rock') {
-      winner.innerHTML = 'Computer win';
-      cScore++;
-      updateScore();
-      return;
+      computerWin();
     } else {
-      winner.innerHTML = 'Player wins';
-      pScore++;
-      updateScore();
-      return;
+      playerWin();
     }
+  }
+
+  function playerWin() {
+    winner.innerHTML = 'Player win';
+    pScore++;
+    updateScore();
+  }
+  function computerWin() {
+    winner.innerHTML = 'Computer wins';
+    cScore++;
+    updateScore();
   }
 }
 
-startGame();
-play();
+//play
+
+// function play() {
+//   const options = document.querySelectorAll('.options button');
+//   const playerHand = document.querySelector('.player-hand');
+//   const computerHand = document.querySelector('.computer-hand');
+
+//   //random computer
+//   const computerOptions = ['rock', 'paper', 'scissors'];
+
+//   options.forEach((options) => {
+//     options.addEventListener('click', function () {
+//       // computer choise
+//       const computerNumber = Math.floor(Math.random() * 3);
+
+//       const computerChoise = computerOptions[computerNumber];
+
+//       const playerChoise = this.textContent;
+
+//       compareHands(playerChoise, computerChoise);
+
+//       //update images
+//       playerHand.src = `./img/${playerChoise}.png`;
+//       computerHand.src = `./img/${computerChoise}.png `;
+//     });
+//   });
+// }
